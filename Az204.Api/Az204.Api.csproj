@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Az204.Model.ServiceLayer\Az204.Model.ServiceLayer.csproj" />
+    <ProjectReference Include="..\Az204.Model.UtilitiesLayer\Az204.Model.UtilitiesLayer.csproj" />
   </ItemGroup>
 
 </Project>
