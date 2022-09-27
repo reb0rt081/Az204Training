@@ -12,6 +12,6 @@ namespace Az204.Model.ServiceLayer.Api
 
         Task<List<Login>> GetLogins(AppUtilities.PersistenceTechnologies persistenceTechnology);
 
-        Task<List<Login>> GetLoginByLoginNameAndPassworf(AppUtilities.PersistenceTechnologies persistenceTechnologY, string loginName, string password);
+        Task<List<Login>> GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies persistenceTechnologY, string loginName, string password);
     }
 }

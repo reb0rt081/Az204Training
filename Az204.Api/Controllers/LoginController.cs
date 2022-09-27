@@ -49,5 +49,17 @@ namespace Az204.Api.Controllers
 
             return Ok(savedLogin);
         }
+
+        //  La ruta incluye los parámetros que necesitamos para el método
+        [Route("{loginName}/{password}")]
+        [HttpGet]
+        
+        public async Task<IActionResult> GetLoginByNameAndPassword(string loginName, string password)
+        {
+            ServiceManager serviceManager = new ServiceManager();
+            Task<List<Login>> logins = serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginName, password);
+
+            return Ok(logins);
+        }
     }
 }

@@ -20,9 +20,9 @@ namespace Az204.Model.ServiceLayer.Impl
             return GetPersistenceManager(persistenceTechnology).GetLoginDao().GetLogins();
         }
 
-        public Task<List<Login>> GetLoginByLoginNameAndPassworf(AppUtilities.PersistenceTechnologies persistenceTechnologY, string loginName, string password)
+        public Task<List<Login>> GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies persistenceTechnology, string loginName, string password)
         {
-            throw new NotImplementedException();
+            return GetPersistenceManager(persistenceTechnology).GetLoginDao().GetLoginByLoginNameAndPassword(loginName, password);
         }
 
         public Task<Login> Save(Login login, AppUtilities.PersistenceTechnologies persistenceTechnology)
