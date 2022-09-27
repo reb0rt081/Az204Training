@@ -7,5 +7,7 @@ namespace Az204.Model.PersistenceLayer.Api
         Task<Login> Save(Login login);
 
         Task<List<Login>> GetLogins();
+
+        Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password);
     }
 }

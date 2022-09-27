@@ -10,6 +10,11 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
             throw new NotImplementedException();
         }
 
+        public Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Login> Save(Login login)
         {
             throw new NotImplementedException();
