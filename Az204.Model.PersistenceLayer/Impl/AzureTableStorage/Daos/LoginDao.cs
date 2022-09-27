@@ -1,5 +1,9 @@
 ﻿using Az204.Model.EntitiesLayer.Entities;
 using Az204.Model.PersistenceLayer.Api;
+using Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities;
+
+using Azure;
+using Azure.Data.Tables;
 
 namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
 {
@@ -10,9 +14,19 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
             throw new NotImplementedException();
         }
 
-        public Task<Login> Save(Login login)
+        public async Task<Login> Save(Login login)
         {
-            throw new NotImplementedException();
+            //  La connection string se puede obtener en el portal de Azure
+            string connectionString = "connectionStringFromAzurePortal";
+            
+            //  El table name tiene que coindifir con la tabla que hemos creado en el portal
+            TableClient tableClient = new TableClient(connectionString, "logins");
+
+            await tableClient.CreateIfNotExistsAsync();
+
+            Response? response = await tableClient.UpdateEntityAsync(new LoginTableEntity(login), ETag.All);
+
+            return login;
         }
     }
 }

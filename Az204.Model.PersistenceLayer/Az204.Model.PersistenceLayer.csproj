@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Az204.Model.EntitiesLayer\Az204.Model.EntitiesLayer.csproj" />
     <ProjectReference Include="..\Az204.Model.UtilitiesLayer\Az204.Model.UtilitiesLayer.csproj" />
   </ItemGroup>
