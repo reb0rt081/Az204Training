@@ -1,4 +1,5 @@
-﻿using Az204.Model.EntitiesLayer.Entities;
+﻿using Az204.Api.DTOs;
+using Az204.Model.EntitiesLayer.Entities;
 using Az204.Model.ServiceLayer.Managers;
 using Az204.Model.UtilitiesLayer;
 using Microsoft.AspNetCore.Http;
@@ -50,7 +51,8 @@ namespace Az204.Api.Controllers
             return Ok(savedLogin);
         }
 
-        //  La ruta incluye los parámetros que necesitamos para el método
+        //  La ruta incluye los parámetros que necesitamos para el método.
+        //  Esto no es seguro para nada ya que se expone la password. La mejor manera es utilizar un HttpPost para hacerlo seguro. 
         [Route("{loginName}/{password}")]
         [HttpGet]
         
@@ -58,6 +60,17 @@ namespace Az204.Api.Controllers
         {
             ServiceManager serviceManager = new ServiceManager();
             Task<List<Login>> logins = serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginName, password);
+
+            return Ok(logins);
+        }
+
+        //  Safer way to do it
+        [Route("GetLoginByNameAndPassword")]
+        [HttpPost]
+        public async Task<IActionResult> GetLoginByNameAndPassword([FromBody] LoginControllerGetLoginByNameAndPasswordDto loginDto)
+        {
+            ServiceManager serviceManager = new ServiceManager();
+            Task<List<Login>> logins = serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginDto.LoginName, loginDto.Password);
 
             return Ok(logins);
         }
