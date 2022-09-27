@@ -11,7 +11,25 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
     {
         public Task<List<Login>> GetLogins()
         {
-            throw new NotImplementedException();
+            //  La connection string se puede obtener en el portal de Azure
+            string connectionString = "connectionStringFromAzurePortal";
+
+            TableClient tableClient = new TableClient(connectionString, "logins");
+
+            Pageable<LoginTableEntity>? query = tableClient.Query<LoginTableEntity>();
+            List<Login> logins = new List<Login>();
+
+            foreach (LoginTableEntity? loginTableEntity in query)
+            {
+                logins.Add(new Login
+                {
+                    Id = Guid.Parse(loginTableEntity.Id),
+                    Name = loginTableEntity.PartitionKey,
+                    Password = loginTableEntity.RowKey
+                });
+            }
+
+            return Task.FromResult(logins);
         }
 
         public async Task<Login> Save(Login login)
@@ -19,11 +37,12 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
             //  La connection string se puede obtener en el portal de Azure
             string connectionString = "connectionStringFromAzurePortal";
             
-            //  El table name tiene que coindifir con la tabla que hemos creado en el portal
+            //  El table name tiene que coincidir con la tabla que hemos creado en el portal
             TableClient tableClient = new TableClient(connectionString, "logins");
 
             await tableClient.CreateIfNotExistsAsync();
 
+            //  Tambien se pueden guardar entitades en batch y no una a una
             Response? response = await tableClient.UpdateEntityAsync(new LoginTableEntity(login), ETag.All);
 
             return login;
