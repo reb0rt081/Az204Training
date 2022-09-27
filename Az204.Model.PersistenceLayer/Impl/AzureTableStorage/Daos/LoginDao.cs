@@ -9,17 +9,17 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
 {
     public class LoginDao : ILoginDao
     {
-        public Task<List<Login>> GetLogins()
+        public async Task<List<Login>> GetLogins()
         {
             //  La connection string se puede obtener en el portal de Azure
             string connectionString = "connectionStringFromAzurePortal";
 
             TableClient tableClient = new TableClient(connectionString, "logins");
 
-            Pageable<LoginTableEntity>? query = tableClient.Query<LoginTableEntity>();
+            AsyncPageable<LoginTableEntity>? query = tableClient.QueryAsync<LoginTableEntity>();
             List<Login> logins = new List<Login>();
 
-            foreach (LoginTableEntity? loginTableEntity in query)
+            await foreach (LoginTableEntity? loginTableEntity in query)
             {
                 logins.Add(new Login
                 {
@@ -29,20 +29,20 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
                 });
             }
 
-            return Task.FromResult(logins);
+            return logins;
         }
 
-        public Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
+        public async Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
         {
             //  La connection string se puede obtener en el portal de Azure
             string connectionString = "connectionStringFromAzurePortal";
 
             TableClient tableClient = new TableClient(connectionString, "logins");
 
-            Pageable<LoginTableEntity>? query = tableClient.Query<LoginTableEntity>(lte => lte.PartitionKey == loginName && lte.RowKey == password);
+            AsyncPageable<LoginTableEntity>? query = tableClient.QueryAsync<LoginTableEntity>(lte => lte.PartitionKey == loginName && lte.RowKey == password);
             List<Login> logins = new List<Login>();
 
-            foreach (LoginTableEntity? loginTableEntity in query)
+            await foreach (LoginTableEntity? loginTableEntity in query)
             {
                 logins.Add(new Login
                 {
@@ -52,7 +52,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
                 });
             }
 
-            return Task.FromResult(logins);
+            return logins;
         }
 
         public async Task<Login> Save(Login login)
