@@ -1,4 +1,5 @@
-﻿using Az204.Api.DTOs;
+﻿using Az204.Api.CustomFilters;
+using Az204.Api.DTOs;
 using Az204.Model.EntitiesLayer.Entities;
 using Az204.Model.ServiceLayer.Managers;
 using Az204.Model.UtilitiesLayer;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Az204.Api.Controllers
 {
+    //  Este atrivbuto hace que nuestro código se ejecute antes de resolver la ruta y el metodo
+    [AzureLogFilter]
     //  La ruta por defecto será nombre/Login
     [Route("[controller]")]
     [ApiController]
