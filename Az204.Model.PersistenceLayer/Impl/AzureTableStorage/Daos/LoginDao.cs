@@ -67,7 +67,8 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
             await tableClient.CreateIfNotExistsAsync();
 
             //  Tambien se pueden guardar entitades en batch y no una a una
-            Response? response = await tableClient.UpdateEntityAsync(new LoginTableEntity(login), ETag.All);
+            // Tambien prueba UpdateEntityAsync
+            Response? response = await tableClient.UpsertEntityAsync(new LoginTableEntity(login));
 
             return login;
         }
