@@ -44,6 +44,24 @@ namespace Az204.Api.Controllers
             return Ok(logins);
         }
 
+        //  La ruta incluye los parámetros que necesitamos para el método.
+        //  Por ejemplo https://localhost:7157/Login/Save/rbo/12345
+        [Route("Save/{loginName}/{password}")]
+        [HttpGet]
+
+        public async Task<IActionResult> SaveLoginNameAndPassword(string loginName, string password)
+        {
+            ServiceManager serviceManager = new ServiceManager();
+            Login login = new Login
+            {
+                Name = loginName,
+                Password = password
+            };
+            Task<Login> savedLogin = serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+
+            return Ok(savedLogin);
+        }
+
         [Route("Save")]
         [HttpPost]
         public async Task<IActionResult> SaveLoginAsync([FromBody] Login login)
