@@ -39,7 +39,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> GetLoginsAsync()
         {
             ServiceManager serviceManager = new ServiceManager();
-            Task<List<Login>> logins = serviceManager.GetLoginService().GetLogins(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+            List<Login> logins = await serviceManager.GetLoginService().GetLogins(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
 
             return Ok(logins);
         }
@@ -57,7 +57,7 @@ namespace Az204.Api.Controllers
                 Name = loginName,
                 Password = password
             };
-            Task<Login> savedLogin = serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+            Login savedLogin = await serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
 
             return Ok(savedLogin);
         }
@@ -67,7 +67,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> SaveLoginAsync([FromBody] Login login)
         {
             ServiceManager serviceManager = new ServiceManager();
-            Task<Login> savedLogin = serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+            Login savedLogin = await serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
 
             return Ok(savedLogin);
         }
@@ -80,7 +80,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> GetLoginByNameAndPassword(string loginName, string password)
         {
             ServiceManager serviceManager = new ServiceManager();
-            Task<List<Login>> logins = serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginName, password);
+            List<Login> logins = await serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginName, password);
 
             return Ok(logins);
         }
@@ -91,7 +91,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> GetLoginByNameAndPassword([FromBody] LoginControllerGetLoginByNameAndPasswordDto loginDto)
         {
             ServiceManager serviceManager = new ServiceManager();
-            Task<List<Login>> logins = serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginDto.LoginName, loginDto.Password);
+            List<Login> logins = await serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginDto.LoginName, loginDto.Password);
 
             return Ok(logins);
         }
