@@ -11,11 +11,11 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
         //  Siempre hay que tener un constructor sin parámetros
         public LoginTableEntity()
         {
+            //  Equivalente a '*' de manera que no nos importa si el ETag ha cambiado, la sobreescribimos.
             ETag = ETag.All;
         }
         public LoginTableEntity(Login login) : this()
         {
-            //  Equivalente a '*' de manera que no nos importa si el ETag ha cambiado, la sobreescribimos.
             PartitionKey = login.Name;
             RowKey = login.Password;
             Id = login.Id.ToString();
