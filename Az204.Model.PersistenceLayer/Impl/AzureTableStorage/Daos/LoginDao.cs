@@ -12,7 +12,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
         public async Task<List<Login>> GetLogins()
         {
             //  La connection string se puede obtener en el portal de Azure
-            string connectionString = "connectionStringFromAzurePortal";
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=ribesstorageaccount;AccountKey=8L3wQW9VMMr7cerg1w3Y7v5fnRo5rID0bYFuLK8WcjIucdDJbzltystBz85pyPsK87tXtvtFReop+AStyOe8Jg==;EndpointSuffix=core.windows.net";
 
             TableClient tableClient = new TableClient(connectionString, "logins");
 
@@ -35,7 +35,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
         public async Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
         {
             //  La connection string se puede obtener en el portal de Azure
-            string connectionString = "connectionStringFromAzurePortal";
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=ribesstorageaccount;AccountKey=8L3wQW9VMMr7cerg1w3Y7v5fnRo5rID0bYFuLK8WcjIucdDJbzltystBz85pyPsK87tXtvtFReop+AStyOe8Jg==;EndpointSuffix=core.windows.net";
 
             TableClient tableClient = new TableClient(connectionString, "logins");
 
