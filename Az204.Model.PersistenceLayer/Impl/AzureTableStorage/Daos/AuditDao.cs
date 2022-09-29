@@ -26,5 +26,10 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
 
             return httpRequestAudit;
         }
+
+        public Task<string> GetSasUrl(string containerName, string blob)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

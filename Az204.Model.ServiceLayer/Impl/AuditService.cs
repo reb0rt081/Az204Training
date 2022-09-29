@@ -22,5 +22,14 @@ namespace Az204.Model.ServiceLayer.Impl
 
             return httpRequestAudit;
         }
+
+        //  Dame una manera de acceder para un recurso Blob, por ejemplo, dada su URL absoluta
+        public async Task<string> GetSasUrl(string container, string blob)
+        {
+            string url = await GetPersistenceManager((AppUtilities.PersistenceTechnologies.AZURE_BLOB_STORAGE)).GetAuditDao()
+                .GetSasUrl(container, blob);
+
+            return url;
+        }
     }
 }
