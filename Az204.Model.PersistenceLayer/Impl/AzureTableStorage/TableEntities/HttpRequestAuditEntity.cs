@@ -14,13 +14,12 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
         }
         public HttpRequestAuditEntity(HttpRequestAudit audit) : this()
         {
-            PartitionKey = audit.UrlRequest;
+            PartitionKey = audit.Id.ToString();
             RowKey = audit.Id.ToString();
             EntityBlobUrl = audit.EntityBlobUrl;
             ClientIp = audit.ClientIp;
             Action = audit.Action;
             Browser = audit.Browser;
-
         }
 
         public string PartitionKey { get; set; }
