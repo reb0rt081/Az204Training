@@ -4,15 +4,15 @@ using Azure.Data.Tables;
 
 namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
 {
-    public class HttpRequestAuditEntity : ITableEntity
+    public class HttpRequestAuditTableEntity : ITableEntity
     {
         //  Siempre hay que tener un constructor sin parámetros
-        public HttpRequestAuditEntity()
+        public HttpRequestAuditTableEntity()
         {
             //  Equivalente a '*' de manera que no nos importa si el ETag ha cambiado, la sobreescribimos.
             ETag = ETag.All;
         }
-        public HttpRequestAuditEntity(HttpRequestAudit audit) : this()
+        public HttpRequestAuditTableEntity(HttpRequestAudit audit) : this()
         {
             PartitionKey = audit.Id.ToString();
             RowKey = audit.Id.ToString();

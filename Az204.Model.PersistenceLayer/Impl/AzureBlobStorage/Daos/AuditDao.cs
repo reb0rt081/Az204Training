@@ -17,7 +17,6 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureBlobStorage.Daos
 
             string connectionString = "DefaultEndpointsProtocol=https;AccountName=ribesstorageaccount;AccountKey=8L3wQW9VMMr7cerg1w3Y7v5fnRo5rID0bYFuLK8WcjIucdDJbzltystBz85pyPsK87tXtvtFReop+AStyOe8Jg==;EndpointSuffix=core.windows.net";
 
-
             BlobContainerClient containerClient = await base.CreateContainerIfNotExistWithCors("audits", connectionString);
 
             //  Nombre del archivo o del repositorio donde guardaremos el blob

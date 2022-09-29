@@ -1,7 +1,5 @@
 ﻿using Az204.Model.EntitiesLayer.Entities;
 using Az204.Model.PersistenceLayer.Api;
-using Az204.Model.PersistenceLayer.Impl.AzureBlobStorage.BlobDtos;
-using Az204.Model.PersistenceLayer.Impl.AzureBlobStorage.Daos;
 using Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities;
 using Azure;
 using Azure.Data.Tables;
@@ -24,7 +22,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
 
             //  Tambien se pueden guardar entitades en batch y no una a una
             // Tambien prueba UpdateEntityAsync
-            Response? response = await tableClient.UpsertEntityAsync(new HttpRequestAuditEntity(httpRequestAudit));
+            Response? response = await tableClient.UpsertEntityAsync(new HttpRequestAuditTableEntity(httpRequestAudit));
 
             return httpRequestAudit;
         }
