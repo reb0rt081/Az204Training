@@ -9,10 +9,16 @@ namespace Az204.Model.PersistenceLayer.PersistenceManagers
 {
     public abstract class PersistenceManager
     {
+        //  Singleton para asegurar que solamente utilizamos en alguno
+        protected IAuditDao auditDao;
         protected ILoginDao loginDao;
 
-        public abstract ILoginDao GetLoginDao();   
+        public abstract IAuditDao GetAuditDao();
+        public abstract ILoginDao GetLoginDao();
+
         
+
+
         //  Los metodos estaticos se ejecutan a nivel de clase, no de objeto. Todos los objetos comparten esta propiedad.
         //  Hay que intentar evitar su uso.
         public static PersistenceManager GetPersistenceManager(AppUtilities.PersistenceTechnologies persistenceTechnology)

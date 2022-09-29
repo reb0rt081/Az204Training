@@ -16,16 +16,20 @@ namespace Az204.Model.ServiceLayer.Managers
             persistenceManagers.Add(PersistenceManager.GetPersistenceManager(UtilitiesLayer.AppUtilities.PersistenceTechnologies.AZURE_COSMOS_DB));
             persistenceManagers.Add(PersistenceManager.GetPersistenceManager(UtilitiesLayer.AppUtilities.PersistenceTechnologies.AZURE_BLOB_STORAGE));
             persistenceManagers.Add(PersistenceManager.GetPersistenceManager(UtilitiesLayer.AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE));
-
-
         }
 
         private ILoginService loginService;
+        private IAuditService auditService;
 
         public ILoginService GetLoginService()
         {
             //  Si generamos un nuevo ServiceManager por cada petición se devolverá la instancia existente de un servicio singleton.
             return loginService ?? (loginService = new LoginService(persistenceManagers));
+        }
+
+        public IAuditService GetAuditService()
+        {
+            return auditService ?? (auditService = new AuditService(persistenceManagers));
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Primitives;
 
 namespace Az204.Model.EntitiesLayer.Entities
 {
-    public class HttpRequestAudit
+    public class HttpRequestAudit : EntityBase
     {
         public DateTimeOffset DateCreated { get; set; }
 
@@ -20,5 +20,7 @@ namespace Az204.Model.EntitiesLayer.Entities
         public double? ComputerTime { get; set; }
 
         public object Entity { get; set; }
+
+        public string EntityBlobUrl { get; set; }
     }
 }

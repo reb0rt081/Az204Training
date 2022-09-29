@@ -8,5 +8,7 @@ namespace Az204.Model.ServiceLayer.Managers
     {
         //  A medida que los servicios aumentan será necesario mejorar esta factoría
         ILoginService GetLoginService();
+
+        IAuditService GetAuditService();
     }
 }

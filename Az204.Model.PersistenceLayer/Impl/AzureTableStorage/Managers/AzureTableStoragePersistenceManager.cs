@@ -6,6 +6,11 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Managers
 {
     public class AzureTableStoragePersistenceManager : PersistenceManager
     {
+        public override IAuditDao GetAuditDao()
+        {
+            return auditDao ?? (auditDao = new AuditDao());
+        }
+
         public override ILoginDao GetLoginDao()
         {
             return loginDao ?? (loginDao = new LoginDao());
