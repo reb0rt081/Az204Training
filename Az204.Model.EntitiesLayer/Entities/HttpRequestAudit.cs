@@ -17,7 +17,7 @@ namespace Az204.Model.EntitiesLayer.Entities
 
         public IDictionary<string, StringValues> HttpHeaders { get; set; }
 
-        public double? ComputerTime { get; set; }
+        public double? ComputeTime { get; set; }
 
         public object Entity { get; set; }
 
