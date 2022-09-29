@@ -17,8 +17,8 @@ namespace Az204.Model.ServiceLayer.Impl
             await GetPersistenceManager(AppUtilities.PersistenceTechnologies.AZURE_BLOB_STORAGE).GetAuditDao()
                 .SaveHttpRequestAudit(httpRequestAudit);
 
-            //await GetPersistenceManager(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE).GetAuditDao()
-            //    .SaveHttpRequestAudit(httpRequestAudit);
+            await GetPersistenceManager(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE).GetAuditDao()
+                .SaveHttpRequestAudit(httpRequestAudit);
 
             return httpRequestAudit;
         }
