@@ -1,5 +1,5 @@
 ﻿using Az204.Model.EntitiesLayer.Entities;
-
+using Az204.Model.ServiceLayer.Managers;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Az204.Api.CustomFilters
@@ -9,6 +9,7 @@ namespace Az204.Api.CustomFilters
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var serviceManager = new ServiceManager();
             //  Tareas pre-ejecución de la petición
             HttpRequestAudit audit = new HttpRequestAudit();
             audit.Action = context.ActionDescriptor.DisplayName;
@@ -16,6 +17,8 @@ namespace Az204.Api.CustomFilters
             audit.HttpHeaders = context.HttpContext.Request.Headers;
             audit.ClientIp = context.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             audit.Entity = context.ActionArguments;
+
+            await serviceManager.GetAuditService().SaveHttpAuditRequest(audit);
 
             //  Esperamos a la petición a ser ejecutada
             ActionExecutedContext resultContext = await next();

@@ -16,7 +16,8 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
                 HttpBody = httpRequestAudit.Entity
             };
 
-            string connectionString = "randomConnections";
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=ribesstorageaccount;AccountKey=8L3wQW9VMMr7cerg1w3Y7v5fnRo5rID0bYFuLK8WcjIucdDJbzltystBz85pyPsK87tXtvtFReop+AStyOe8Jg==;EndpointSuffix=core.windows.net";
+
 
             BlobContainerClient containerClient = await base.CreateContainerIfNotExistWithCors("audits", connectionString);
             
@@ -26,8 +27,17 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.Daos
             //  Serializando contenido del blob
             string json = System.Text.Json.JsonSerializer.Serialize(blobDto);
 
-            await blobClient.UploadAsync(json);
+            using (Stream ms = new MemoryStream())
+            {
+                //  Cargamos el contenido JSON como string en el StreamWriter
+                StreamWriter writer = new StreamWriter(ms);
+                writer.Write(json);
+                writer.Flush();
+                ms.Position = 0;
 
+                await blobClient.UploadAsync(ms, true);
+            }
+            
             //  Guardamos el link o direccion URL del contenido Blob para almacenar más tarde en Table Storage
             httpRequestAudit.EntityBlobUrl = blobClient.Uri.AbsoluteUri;
 
