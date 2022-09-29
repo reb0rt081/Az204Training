@@ -17,7 +17,9 @@ namespace Az204.Api.CustomFilters
             audit.HttpHeaders = context.HttpContext.Request.Headers;
             audit.ClientIp = context.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             audit.Entity = context.ActionArguments;
-
+            //audit.Browser = context.HttpContext.Request.b;
+            audit.UrlRequest = context.HttpContext.Request.Host + context.HttpContext.Request.Path;
+            
             await serviceManager.GetAuditService().SaveHttpAuditRequest(audit);
 
             //  Esperamos a la petición a ser ejecutada

@@ -20,6 +20,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
             ClientIp = audit.ClientIp;
             Action = audit.Action;
             Browser = audit.Browser;
+            UrlRequest = audit.UrlRequest;
         }
 
         public string PartitionKey { get; set; }
@@ -38,6 +39,8 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
         public string Action { get; set; }
 
         public string Browser { get; set; }
+
+        public string UrlRequest { get; set; }
 
     }
 }
