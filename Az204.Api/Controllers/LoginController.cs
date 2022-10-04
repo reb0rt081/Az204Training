@@ -80,7 +80,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> GetLoginByNameAndPassword(string loginName, string password)
         {
             ServiceManager serviceManager = new ServiceManager();
-            List<Login> logins = await serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE, loginName, password);
+            List<Login> logins = await serviceManager.GetLoginService().GetLoginByLoginNameAndPassword(AppUtilities.PersistenceTechnologies.AZURE_COSMOS_DB, loginName, password);
 
             return Ok(logins);
         }

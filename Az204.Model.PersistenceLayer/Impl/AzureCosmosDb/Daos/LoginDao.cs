@@ -13,9 +13,35 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
             throw new NotImplementedException();
         }
 
-        public Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
+        public async Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
         {
-            throw new NotImplementedException();
+            string endpointUri = "https://robertocosmosdb.documents.azure.com:443/";
+            string primaryKey =
+                "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
+            string databaseId = "TestWebDatabse";
+            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Az204TestWeb" });
+            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
+            string containerId = "Logins";
+            //  partitionKey tiene que coincidir con el valor del objeto de dominio que queremos guardar
+            Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
+
+            //  Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
+            var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{loginName}' and c.Password = '{password}'";
+            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
+
+            List<Login> logins = new List<Login>();
+
+            while (queryResultSetIterator.HasMoreResults)
+            {
+                FeedResponse<LoginCosmosTableEntity> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                foreach (LoginCosmosTableEntity loginCosmos in currentResultSet)
+                {
+                    logins.Add(new Login{ Id = Guid.Parse(loginCosmos.Id), Password = loginCosmos.Password, Name = loginCosmos.PartitionKey});
+                }
+            }
+
+            return logins;
         }
 
         public async Task<Login> Save(Login login)
