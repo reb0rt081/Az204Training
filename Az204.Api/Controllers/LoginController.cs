@@ -57,7 +57,7 @@ namespace Az204.Api.Controllers
                 Name = loginName,
                 Password = password
             };
-            Login savedLogin = await serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+            Login savedLogin = await serviceManager.GetLoginService().Save(login, AppUtilities.PersistenceTechnologies.AZURE_COSMOS_DB);
 
             return Ok(savedLogin);
         }
