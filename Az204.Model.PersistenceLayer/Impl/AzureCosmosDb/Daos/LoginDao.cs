@@ -55,8 +55,8 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
             Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
 
             //  CONSEJO: Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
+            //  Alternativa de consulta utilizando la instrucción SQL en lugar de LINQ
             var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{loginName}' and c.Password = '{password}'";
-            //  Alternativa utilizando la instrucción SQL en lugar de LINQ
             //  QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
             //  FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
 
