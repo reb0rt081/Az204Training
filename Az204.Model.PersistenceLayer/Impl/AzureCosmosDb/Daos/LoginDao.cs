@@ -15,23 +15,25 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
 
         public async Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
         {
+            //  Puede ser cualquier nombre de application
+            string applicationName = "Az204TestWeb";
             string endpointUri = "https://robertocosmosdb.documents.azure.com:443/";
-            string primaryKey =
-                "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
+            string primaryKey = "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
+            
             string databaseId = "TestWebDatabse";
-            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Az204TestWeb" });
-            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
             string containerId = "Logins";
-            //  partitionKey tiene que coincidir con el valor del objeto de dominio que queremos guardar
+
+            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = applicationName });
+            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
+            //  partitionKey tiene que coincidir con el nombre de la propiedad del objeto de dominio que queremos guardar (en este caso LoginCosmosTableEntity.partitionKey)
             Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
 
-            //  Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
+            //  CONEJO: Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
             var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{loginName}' and c.Password = '{password}'";
             QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
             FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
 
             List<Login> logins = new List<Login>();
-
             while (queryResultSetIterator.HasMoreResults)
             {
                 FeedResponse<LoginCosmosTableEntity> currentResultSet = await queryResultSetIterator.ReadNextAsync();
@@ -46,22 +48,19 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
 
         public async Task<Login> Save(Login login)
         {
+            //  Puede ser cualquier nombre de application
+            string applicationName = "Az204TestWeb";
             string endpointUri = "https://robertocosmosdb.documents.azure.com:443/";
-            string primaryKey =
-                "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
+            string primaryKey = "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
             string databaseId = "TestWebDatabse";
-            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = "Az204TestWeb" });
-            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
             string containerId = "Logins";
-            //  partitionKey tiene que coincidir con el valor del objeto de dominio que queremos guardar
+
+            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = applicationName });
+            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
+            //  partitionKey tiene que coincidir con el nombre de la propiedad del objeto de dominio que queremos guardar (en este caso LoginCosmosTableEntity.partitionKey)
             Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
 
-            LoginCosmosTableEntity item = new LoginCosmosTableEntity()
-            {
-                PartitionKey = login.Name,
-                Id = login.Id.ToString(),
-                Password = login.Password
-            };
+            LoginCosmosTableEntity item = new LoginCosmosTableEntity(login);
 
             try
             {

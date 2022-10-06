@@ -2,7 +2,7 @@
 {
     public abstract class EntityBase
     {
-        public EntityBase()
+        protected EntityBase()
         {
             //  Sigue la regla de quien crea el objeto asigna el Id.
             Id = Guid.NewGuid();
