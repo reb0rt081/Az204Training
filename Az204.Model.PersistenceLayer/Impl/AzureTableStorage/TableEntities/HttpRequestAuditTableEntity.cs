@@ -15,7 +15,7 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureTableStorage.TableEntities
         }
         public HttpRequestAuditTableEntity(HttpRequestAudit audit) : this()
         {
-            //  Para auditar vamos a generar particiones/tablas cada hoa
+            //  Para auditar vamos a generar particiones/tablas cada hora
             PartitionKey = audit.DateCreated.ToString("yyyy-MM-dd-HH", CultureInfo.InvariantCulture);
             RowKey = audit.Id.ToString();
             RequestDate = audit.DateCreated;

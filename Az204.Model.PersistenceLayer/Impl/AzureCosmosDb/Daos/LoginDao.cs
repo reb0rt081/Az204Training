@@ -19,7 +19,6 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
             string applicationName = "Az204TestWeb";
             string endpointUri = "https://robertocosmosdb.documents.azure.com:443/";
             string primaryKey = "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
-            
             string databaseId = "TestWebDatabse";
             string containerId = "Logins";
 
@@ -64,17 +63,23 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
 
             try
             {
+                // Create an item in the container representing the Andersen family. Note we provide the value of the partition key for this item, which is "Andersen"
+                ItemResponse<LoginCosmosTableEntity> createLoginResponse = await container.CreateItemAsync<LoginCosmosTableEntity>(item, new PartitionKey(item.PartitionKey));
+
+                // Note that after creating the item, we can access the body of the item with the Resource property off the ItemResponse. We can also access the RequestCharge property to see the amount of RUs consumed on this request.
+                Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", createLoginResponse.Resource.Id, createLoginResponse.RequestCharge);
+
                 // Read the item to see if it exists.  
-                ItemResponse<LoginCosmosTableEntity> andersenFamilyResponse = await container.ReadItemAsync<LoginCosmosTableEntity>(item.Id, new PartitionKey(item.PartitionKey));
-                Console.WriteLine("Item in database with id: {0} already exists\n", andersenFamilyResponse.Resource.Id);
+                createLoginResponse = await container.ReadItemAsync<LoginCosmosTableEntity>(item.Id, new PartitionKey(item.PartitionKey));
+                Console.WriteLine("Item in database with id: {0} finally exists\n", createLoginResponse.Resource.Id);
             }
             catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                // Create an item in the container representing the Andersen family. Note we provide the value of the partition key for this item, which is "Andersen"
-                ItemResponse<LoginCosmosTableEntity> andersenFamilyResponse = await container.CreateItemAsync<LoginCosmosTableEntity>(item, new PartitionKey(item.PartitionKey));
+                // Replace an item in the container representing the Andersen family. Note we provide the value of the partition key for this item, which is "Andersen"
+                ItemResponse<LoginCosmosTableEntity> replaceLoginResponse = await container.ReplaceItemAsync(item, item.Id, new PartitionKey(item.PartitionKey));
 
                 // Note that after creating the item, we can access the body of the item with the Resource property off the ItemResponse. We can also access the RequestCharge property to see the amount of RUs consumed on this request.
-                Console.WriteLine("Created item in database with id: {0} Operation consumed {1} RUs.\n", andersenFamilyResponse.Resource.Id, andersenFamilyResponse.RequestCharge);
+                Console.WriteLine("Updated item in database with id: {0} Operation consumed {1} RUs.\n", replaceLoginResponse.Resource.Id, replaceLoginResponse.RequestCharge);
             }
 
             return login;
