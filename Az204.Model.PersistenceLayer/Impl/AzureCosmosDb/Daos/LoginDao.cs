@@ -3,14 +3,41 @@ using Az204.Model.EntitiesLayer.Entities;
 using Az204.Model.PersistenceLayer.Api;
 using Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.TableEntities;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 
 namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
 {
     public class LoginDao : ILoginDao
     {
-        public Task<List<Login>> GetLogins()
+        public async Task<List<Login>> GetLogins()
         {
-            throw new NotImplementedException();
+            //  Puede ser cualquier nombre de application
+            string applicationName = "Az204TestWeb";
+            string endpointUri = "https://robertocosmosdb.documents.azure.com:443/";
+            string primaryKey = "QBLROrRLoHmIkQhGeHElRzKECiUq06f0uj6EeengggOHRy2WWG9svQL6D7tgkARkbgENZwursjjpcJX8Ng0Jug==";
+            string databaseId = "TestWebDatabse";
+            string containerId = "Logins";
+
+            CosmosClient cosmosClient = new CosmosClient(endpointUri, primaryKey, new CosmosClientOptions() { ApplicationName = applicationName });
+            Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
+            //  partitionKey tiene que coincidir con el nombre de la propiedad del objeto de dominio que queremos guardar (en este caso LoginCosmosTableEntity.partitionKey)
+            Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
+
+            var sqlQueryText = "SELECT * FROM c";
+            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            List<Login> logins = new List<Login>();
+
+            FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
+            while (queryResultSetIterator.HasMoreResults)
+            {
+                FeedResponse<LoginCosmosTableEntity> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                foreach (LoginCosmosTableEntity loginCosmos in currentResultSet)
+                {
+                    logins.Add(new Login { Id = Guid.Parse(loginCosmos.Id), Password = loginCosmos.Password, Name = loginCosmos.PartitionKey });
+                }
+            }
+            
+            return logins;
         }
 
         public async Task<List<Login>> GetLoginByLoginNameAndPassword(string loginName, string password)
@@ -27,18 +54,22 @@ namespace Az204.Model.PersistenceLayer.Impl.AzureCosmosDb.Daos
             //  partitionKey tiene que coincidir con el nombre de la propiedad del objeto de dominio que queremos guardar (en este caso LoginCosmosTableEntity.partitionKey)
             Container container = await database.CreateContainerIfNotExistsAsync(containerId, "/partitionKey");
 
-            //  CONEJO: Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
+            //  CONSEJO: Utiliza el editor manual de consultas en el portal de Azure Cosmos DB para probar que la consulta funciona
             var sqlQueryText = $"SELECT * FROM c WHERE c.partitionKey = '{loginName}' and c.Password = '{password}'";
-            QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-            FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
+            //  Alternativa utilizando la instrucción SQL en lugar de LINQ
+            //  QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
+            //  FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemQueryIterator<LoginCosmosTableEntity>(queryDefinition);
 
             List<Login> logins = new List<Login>();
-            while (queryResultSetIterator.HasMoreResults)
+            using (FeedIterator<LoginCosmosTableEntity> queryResultSetIterator = container.GetItemLinqQueryable<LoginCosmosTableEntity>().Where(lc => lc.PartitionKey == loginName && lc.Password == password).ToFeedIterator<LoginCosmosTableEntity>())
             {
-                FeedResponse<LoginCosmosTableEntity> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-                foreach (LoginCosmosTableEntity loginCosmos in currentResultSet)
+                while (queryResultSetIterator.HasMoreResults)
                 {
-                    logins.Add(new Login{ Id = Guid.Parse(loginCosmos.Id), Password = loginCosmos.Password, Name = loginCosmos.PartitionKey});
+                    FeedResponse<LoginCosmosTableEntity> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+                    foreach (LoginCosmosTableEntity loginCosmos in currentResultSet)
+                    {
+                        logins.Add(new Login { Id = Guid.Parse(loginCosmos.Id), Password = loginCosmos.Password, Name = loginCosmos.PartitionKey });
+                    }
                 }
             }
 

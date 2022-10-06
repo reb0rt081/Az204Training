@@ -39,7 +39,7 @@ namespace Az204.Api.Controllers
         public async Task<IActionResult> GetLoginsAsync()
         {
             ServiceManager serviceManager = new ServiceManager();
-            List<Login> logins = await serviceManager.GetLoginService().GetLogins(AppUtilities.PersistenceTechnologies.AZURE_TABLE_STORAGE);
+            List<Login> logins = await serviceManager.GetLoginService().GetLogins(AppUtilities.PersistenceTechnologies.AZURE_COSMOS_DB);
 
             return Ok(logins);
         }
