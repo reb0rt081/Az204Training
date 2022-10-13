@@ -30,12 +30,24 @@ namespace Az204.Queue.Receiver
                     response = await queueClient.ReceiveMessageAsync(TimeSpan.FromSeconds(60));
                 }
 
-                Console.WriteLine("Received - " + response.Value.MessageText);
+                if (response == null)
+                {
+                    Console.WriteLine("No more messages in queue ");
+                }
+                else
+                {
+                    Console.WriteLine("Received - " + response.Value?.MessageText);
+                }
+                
 
                 Thread.Sleep(TimeSpan.FromSeconds(30));
 
-                //  Aquí borramos el mensaje de la cola
-                await queueClient.DeleteMessageAsync(response.Value.MessageId, response.Value.PopReceipt);
+                if (response != null)
+                {
+                    //  Aquí borramos el mensaje de la cola
+                    await queueClient.DeleteMessageAsync(response.Value.MessageId, response.Value.PopReceipt);
+                }
+
             }
         }
     }
