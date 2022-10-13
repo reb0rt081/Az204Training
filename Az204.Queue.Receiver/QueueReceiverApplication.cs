@@ -45,7 +45,7 @@ namespace Az204.Queue.Receiver
                 if (response != null)
                 {
                     //  Aquí borramos el mensaje de la cola
-                    await queueClient.DeleteMessageAsync(response.Value.MessageId, response.Value.PopReceipt);
+                    await queueClient.DeleteMessageAsync(response.Value?.MessageId, response.Value.PopReceipt);
                 }
 
             }
