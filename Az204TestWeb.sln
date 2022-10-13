@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Az204.Queue.Receiver", "Az2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Az204.ServiceBus.Publisher", "Az204.ServiceBus.Publisher\Az204.ServiceBus.Publisher.csproj", "{FB3CB877-4FE4-4617-8BC1-465B96719335}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Az204.ServiceBus.Reader", "Az204.ServiceBus.Reader\Az204.ServiceBus.Reader.csproj", "{D382F721-D594-48BD-9892-6A97A7940F2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{FB3CB877-4FE4-4617-8BC1-465B96719335}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB3CB877-4FE4-4617-8BC1-465B96719335}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB3CB877-4FE4-4617-8BC1-465B96719335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D382F721-D594-48BD-9892-6A97A7940F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D382F721-D594-48BD-9892-6A97A7940F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D382F721-D594-48BD-9892-6A97A7940F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D382F721-D594-48BD-9892-6A97A7940F2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{DE13F175-CD77-46E7-9178-6192C17FE5C9} = {4BADCC27-C671-40E4-A230-0C75D27EA0B4}
 		{A8432533-62D0-4FB1-814C-610D0E1BDCAB} = {4BADCC27-C671-40E4-A230-0C75D27EA0B4}
 		{FB3CB877-4FE4-4617-8BC1-465B96719335} = {4BADCC27-C671-40E4-A230-0C75D27EA0B4}
+		{D382F721-D594-48BD-9892-6A97A7940F2E} = {4BADCC27-C671-40E4-A230-0C75D27EA0B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8500DFD5-56AA-476F-AED4-319F1F728F89}
