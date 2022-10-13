@@ -25,13 +25,19 @@ namespace Az204.Queue.Sender
                 if (queueClient.Exists())
                 {
 
-                    await queueClient.SendMessageAsync(message);
+                    await queueClient.SendMessageAsync(Base64Encode(message));
                 }
 
                 Console.WriteLine(message);
 
                 Thread.Sleep(TimeSpan.FromSeconds(30));
             }
+        }
+
+        private static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
     }
 }
